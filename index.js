@@ -17,6 +17,9 @@ app.post('/api/message',(req,res)=>{
     console.log(req.body.message);
     res.send(req.body.message);
 })
+app.post('/api/message1',(req,res)=>{
+    res.send('wowwwww!!!!');
+})
 
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
