@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
     socket.on('someswar',(data)=>{
 
         console.log('message received',data);
-        io.emit('message',data);
+        io.emit('message','this is pod');
     })
     socket.on('disconnect', () => {
         console.log('A user disconnected');
