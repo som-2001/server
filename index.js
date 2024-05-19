@@ -1,7 +1,16 @@
 const express=require('express');
 const app=express();
 const server=require('http').createServer(app);
-const io=require('socket.io')(server);
+const cors=require('cors');
+const io=require('socket.io')(server,{ cors: { origin: '*' }});
+
+app.use(
+    cors({
+      origin: ["*"],
+      methods: ["GET", "POST", "PUT"],
+      credentials: true,
+    })
+  ); 
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -29,6 +38,7 @@ io.on('connection', (socket) => {
 
         console.log('message received',data);
         io.emit('message','this is pod');
+
     })
     socket.on('disconnect', () => {
         console.log('A user disconnected');
