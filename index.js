@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
     socket.on('someswar',(data)=>{
 
         console.log('message received',data);
-        io.emit('message',data);
+        socket.broadcast.emit('message',data);
 
     })
     socket.on('disconnect', () => {
