@@ -34,6 +34,8 @@ app.post('/api/message1',(req,res)=>{
 io.on('connection', (socket) => {
     console.log('A user connected');
     
+    socket.broadcast.emit('userJoined', { message: 'A new user has joined' });
+    
     socket.on('someswar',(data)=>{
 
         console.log('message received',data);
