@@ -44,7 +44,8 @@ io.on('connection', (socket) => {
     socket.on('image-file',(data)=>{
 
         console.log(data);
-        socket.broadcast.emit('image-file',{Url:data.Url,type:data.type});
+        const Url=encodeURIComponent(data.Url)
+        socket.broadcast.emit('image-file',{Url:Url,type:data.type});
 
     })
     socket.on('disconnect', () => {
