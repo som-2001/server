@@ -2,7 +2,7 @@ const express=require('express');
 const app=express();
 const server=require('http').createServer(app);
 const cors=require('cors');
-const io=require('socket.io')(server,{ cors: { origin: '*' }});
+const io=require('socket.io')(server,{ cors: { origin: '*' }, maxHttpBufferSize: 1e8 });
 
 app.use(
     cors({
