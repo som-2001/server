@@ -38,8 +38,13 @@ io.on('connection', (socket) => {
     
     socket.on('someswar',(data)=>{
 
-        console.log('message received',data);
         socket.broadcast.emit('message',data);
+
+    })
+    socket.on('image-file',(data)=>{
+
+        console.log(data);
+        socket.broadcast.emit('image-file',{Url:data.Url,type:data.type});
 
     })
     socket.on('disconnect', () => {
