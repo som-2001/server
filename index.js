@@ -32,23 +32,47 @@ app.post('/api/message1',(req,res)=>{
 })
 
 io.on('connection', (socket) => {
-    console.log('A user connected');
+        
+    socket.on('join_room',(data)=>{
+
+        // console.log(data);
+        const roomId=`${data.StoredRoomname}-${data.Storedcode}`;
+        // console.log(roomId);
+        socket.join(roomId);
+        // console.log(`${data.Storedname} joined room: ${data.StoredRoomname}`);
+        socket.to(roomId).emit('userJoined', { message: `${data.Storedname} has joined the chat` });
+    })
+
+    // socket.on("typing", (data) => {
+    //     // console.log(data);
+    //     const roomId=`${data.room}-${data.code}`;
+    //     console.log(roomId);
+    //     socket.to(roomId).emit('typing', data);
+    //   });
     
-    socket.broadcast.emit('userJoined', { message: 'A new user has joined' });
-    
+    //   socket.on("stopTyping", (data) => {
+       
+    //     const roomId=`${data.room}-${data.code}`;
+    //     console.log(roomId); 
+    //     socket.to(roomId).emit("stopTyping", data);
+    //   }); 
+      
     socket.on('someswar',(data)=>{
 
-        socket.broadcast.emit('message',data);
+        const roomId=`${data.room}-${data.code}`;
+        console.log(roomId); 
+        console.log(data);
+        socket.to(roomId).emit('message',data);
 
     })
     socket.on('image-file',(data)=>{
-
-        console.log(data);
-        socket.broadcast.emit('image-file',{Url:data.Url,type:data.type});
+        const roomId=`${data.room}-${data.code}`;
+        console.log(roomId);
+        socket.to(roomId).emit('image-file',{Url:data.Url,type:data.type,name:data.name});
 
     })
     socket.on('disconnect', () => {
-        console.log('A user disconnected');
+        // console.log('A user disconnected');
     });
 });
 
