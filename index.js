@@ -90,6 +90,13 @@ io.on("connection", (socket) => {
     console.log(roomId);
     io.to(roomId).emit('total_member',{members:members})
   });
+
+  socket.on("deleteMessage",(data)=>{
+    const roomId = `${data.room}-${data.code}`;
+    console.log(data);
+    io.to(roomId).emit('deleteMessage',data);
+  })
+
   socket.on("disconnect", () => {
     
     console.log(socket.id);
