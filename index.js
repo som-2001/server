@@ -67,7 +67,7 @@ io.on("connection", (socket) => {
     const roomId = `${data.room}-${data.code}`;
     socket
       .to(roomId)
-      .emit("image-file", { Url: data.Url, type: data.type, name: data.name });
+      .emit("image-file", { Url: data.Url, type: data.type, name: data.name,getCurrentTime:data.getCurrentTime  });
   });
   socket.on("total_member", (data) => {
 
