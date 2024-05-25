@@ -53,8 +53,7 @@ io.on("connection", (socket) => {
       };
     }
     socket.join(roomId);
-    console.log(users);
-    console.log("segse");
+  
     socket.to(roomId).emit("userJoined", {
       message: `${data.Storedname} has joined the chat`,
     });
@@ -62,13 +61,10 @@ io.on("connection", (socket) => {
 
   socket.on("someswar", (data) => {
     const roomId = `${data.room}-${data.code}`;
-    console.log(roomId);
-    console.log(data);
     socket.to(roomId).emit("message", data);
   });
   socket.on("image-file", (data) => {
     const roomId = `${data.room}-${data.code}`;
-    console.log(roomId);
     socket
       .to(roomId)
       .emit("image-file", { Url: data.Url, type: data.type, name: data.name });
@@ -76,8 +72,7 @@ io.on("connection", (socket) => {
   socket.on("total_member", (data) => {
 
     const roomId = `${data.room}-${data.code}`;
-    console.log(users);
-
+  
     for (const socketId in users) {
       const user = users[socketId];
       
@@ -87,29 +82,36 @@ io.on("connection", (socket) => {
        
       }
     }
-    console.log(roomId);
     io.to(roomId).emit('total_member',{members:members})
   });
 
   socket.on("deleteMessage",(data)=>{
     const roomId = `${data.room}-${data.code}`;
-    console.log(data);
     io.to(roomId).emit('deleteMessage',data);
   })
 
+  socket.on("typing", (data) => {
+
+    const roomId = `${data.room}-${data.code}`;
+    socket.to(roomId).emit('typing', data);
+  });
+
+  socket.on("stopTyping", (data) => {
+
+    const roomId = `${data.room}-${data.code}`;
+    socket.to(roomId).emit("stopTyping", data);
+
+  });
   socket.on("disconnect", () => {
     
-    console.log(socket.id);
     const roomId = `${users[socket.id]?.room}-${users[socket.id]?.code}`;
-    console.log(users[socket.id]?.name);
-    console.log(roomId);
-
+    
     members=members.filter((item)=>item.socketId!==socket.id)
     socketIdStore=socketIdStore.filter(item=>item!==socket.id);
 
     socket.to(roomId).emit("left_room", { user: users[socket.id]?.name,members:members });
     delete users[socket.id];
-    console.log(users);
+
   });
 });
 
