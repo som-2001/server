@@ -37,6 +37,8 @@ app.post("/api/message1", (req, res) => {
 var users = [];
 var members = [];
 var socketIdStore=[];
+var Symbol='X';
+var turn='playerO';
 
 io.on("connection", (socket) => {
   socket.on("join_room", (data) => {
@@ -56,10 +58,13 @@ io.on("connection", (socket) => {
   
     socket.to(roomId).emit("userJoined", {
       message: `${data.Storedname} has joined the chat`,
-    });
+      id:socket.id
+    })
+   
   });
 
   socket.on("someswar", (data) => {
+    console.log(data);
     const roomId = `${data.room}-${data.code}`;
     socket.to(roomId).emit("message", data);
   });
@@ -102,6 +107,22 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("stopTyping", data);
 
   });
+
+  socket.on("clicked",(data)=>{
+    
+    const roomId = `${data.room}-${data.code}`;
+    if(Symbol==='X'){
+      Symbol='O'
+    }else{
+      Symbol='X';
+    }
+    if(turn==='playerX'){
+      turn='playerO'
+    }else
+      turn='playerX';
+   
+    io.to(roomId).emit("clicked",{data:data,turn:turn,Symbol:Symbol});
+  })
   socket.on("disconnect", () => {
     
     const roomId = `${users[socket.id]?.room}-${users[socket.id]?.code}`;
